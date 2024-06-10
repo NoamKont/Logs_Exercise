@@ -260,9 +260,11 @@ def getLogsLevel():
 
     name = request.args.get('logger-name')
     if name == 'request-logger':
-        level = request_logger.level, 200
-    elif name == 'book-logger':
-        level = books_logger.level, 200
+        level = request_logger.level
+        level_string = logging.getLevelName(level)
+    elif name == 'books-logger':
+        level = books_logger.level
+        level_string = logging.getLevelName(level)
     else:
         duration = (time.time() - start_time) * 1000
         request_log_debug(duration)
@@ -270,24 +272,24 @@ def getLogsLevel():
 
     duration = (time.time() - start_time) * 1000
     request_log_debug(duration)
-    return jsonify({"result": level}), 200
+    return level_string, 200
 
 @app.route('/logs/level', methods=['PUT'], endpoint='Set The Current Level')
 def setLogsLevel():
     start_time = time.time()
-    request_log_info('/logs/level', 'GET')
+    request_log_info('/logs/level', 'PUT')
 
     name = request.args.get('logger-name')
     level = request.args.get('logger-level').upper()
     levels = {
-        'ERROR': 40,
-        'INFO': 20,
-        'DEBUG': 10,
+        'ERROR': logging.ERROR,
+        'INFO': logging.INFO,
+        'DEBUG': logging.DEBUG,
     }
     if name == 'request-logger':
         request_logger.setLevel(levels[level])
-    elif name == 'book-logger':
-        request_logger.setLevel(levels[level])
+    elif name == 'books-logger':
+        books_logger.setLevel(levels[level])
     else:
         duration = (time.time() - start_time) * 1000
         request_log_debug(duration)

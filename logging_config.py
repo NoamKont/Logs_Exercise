@@ -30,7 +30,7 @@ logging_config = {
     'loggers': {
         'request-logger': {
             'handlers': ['requests_file_handler', 'console_handler'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': False,
         },
         'books-logger': {
