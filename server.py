@@ -95,27 +95,46 @@ class book:
             "genres": self.Genre
         }
 
-
+def time_stemp():
+    t = datetime.datetime.now()
+    s = t.strftime('%d-%m-%Y %H:%M:%S.%f')
+    return s[:-3]
 def request_log_info(resource, verb):
     global request_counter
     request_counter += 1
-    extra = {'request_number': request_counter}
+    time = time_stemp()
+    extra = {'request_number': request_counter,
+             'time': time
+             }
     request_logger.info(f'Incoming request | #{request_counter} | resource: {resource} | HTTP Verb {verb}', extra=extra)
 
 def request_log_debug(duration):
-    extra = {'request_number': request_counter}
+    t = datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S.%f')[:3]
+    time = time_stemp()
+    extra = {'request_number': request_counter,
+             'time': time
+             }
     request_logger.debug(f'request #{request_counter} duration: {duration}ms', extra=extra)
 
 def book_log_info(message):
-    extra = {'request_number': request_counter}
+    time = time_stemp()
+    extra = {'request_number': request_counter,
+             'time': time
+             }
     books_logger.info(message, extra=extra)
 
 def book_log_debug(message):
-    extra = {'request_number': request_counter}
+    time = time_stemp()
+    extra = {'request_number': request_counter,
+             'time': time
+             }
     books_logger.debug(message, extra=extra)
 
 def book_log_error(message):
-    extra = {'request_number': request_counter}
+    time = time_stemp()
+    extra = {'request_number': request_counter,
+             'time': time
+             }
     books_logger.error(message, extra=extra)
 
 

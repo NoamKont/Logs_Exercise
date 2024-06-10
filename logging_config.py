@@ -1,11 +1,11 @@
+import datetime
 logging_config = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'default': {
-            'format': '%(asctime)s %(levelname)s: %(message)s | request #%(request_number)d ',
-            'datefmt': '%d-%m-%Y %H:%M:%S',
-
+            'format': '%(time)s %(levelname)s: %(message)s | request #%(request_number)d ',
+            #'datefmt': '%d-%m-%Y %H:%M:%S.%f',  # Removed extra period before %f
         },
     },
     'handlers': {
