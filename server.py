@@ -4,8 +4,84 @@ from logging_config import logging_config
 import os
 import time
 import datetime
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+
+# Replace with your credentials and host information
+host = "localhost"  # Use the Docker host IP if connecting from another machine
+port = 27017        # Default MongoDB port
+
+# MongoDB connection URI
+uri = f"mongodb://{host}:{port}/"
+
+# Create a client
+try:
+    # Connect to MongoDB
+    client = MongoClient(uri)
+
+    # Ping the server to check the connection
+    client.admin.command("ping")
+    print("Connection successful!")
+
+except ConnectionFailure as e:
+    print(f"Connection failed: {e}")
 
 
+# Access a specific database
+db = client["books"]  # Replace 'my_database' with your database name
+print(db)
+# Access a collection
+collection = db["books"]  # Replace 'my_collection' with your collection name
+print(collection)
+
+all_records = collection.find()
+print(list(all_records))
+for record in all_records:
+    print(record)
+
+
+import psycopg2
+
+# Database connection parameters
+host = "localhost"  # or your database server's address
+database = "books"
+user = "postgres"
+password = "docker"
+port = 5432  # default PostgreSQL port
+
+try:
+    # Establishing the connection
+    connection = psycopg2.connect(
+        host=host,
+        database=database,
+        user=user,
+        password=password,
+        port=port
+    )
+
+    # Create a cursor object
+    cursor = connection.cursor()
+
+    # Query to fetch all data from the 'books' table
+    cursor.execute("SELECT * FROM books;")
+
+    # Fetch all rows from the result of the query
+    rows = cursor.fetchall()
+
+    # Print the data in the 'books' table
+    for row in rows:
+        print(row)
+
+except psycopg2.Error as e:
+    print(f"Error while connecting to PostgreSQL: {e}")
+
+finally:
+    # Close the cursor and connection
+    if cursor:
+        cursor.close()
+    if connection:
+        connection.close()
+        print("PostgreSQL connection is closed")
 
 request_counter = 0
 
@@ -320,4 +396,4 @@ def setLogsLevel():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, port=8574)
+    app.run(host='0.0.0.0', debug=False, port=8574)
